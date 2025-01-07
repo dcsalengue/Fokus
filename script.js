@@ -8,7 +8,7 @@ const botoes = document.querySelectorAll('.app__card-button');
 const startPauseBt = document.querySelector('#start-pause');
 const musicaFocoInput = document.querySelector('#alternar-musica');
 const musica = new Audio('./sons/luna-rise-part-one.mp3');
-const somDeAlerta = new Audio();
+
 
 let tempoDecorridoEmSegundos = 5;
 let intervaloId = null;
@@ -67,6 +67,8 @@ function alterarContexto(contexto) {
     titulo.innerText;
 }
 
+
+const somDeAlerta = new Audio();
 function tocaSomPausa()
 {
     somDeAlerta.src = './sons/beep.mp3';
