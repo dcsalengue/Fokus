@@ -8,7 +8,9 @@ const botoes = document.querySelectorAll('.app__card-button');
 const startPauseBt = document.querySelector('#start-pause');
 const musicaFocoInput = document.querySelector('#alternar-musica');
 const musica = new Audio('./sons/luna-rise-part-one.mp3');
-
+const audioPlay = new Audio('/sons/play.wav');
+const audioPausa = new Audio('/sons/pause.mp3');
+const audioTempoFinalizado = new Audio('./sons/beep.mp3')
 
 let tempoDecorridoEmSegundos = 5;
 let intervaloId = null;
@@ -67,22 +69,13 @@ function alterarContexto(contexto) {
     titulo.innerText;
 }
 
-
-const somDeAlerta = new Audio();
-function tocaSomPausa()
-{
-    somDeAlerta.src = './sons/beep.mp3';
-    somDeAlerta.loop = false;
-    somDeAlerta.play();
-
-    somDeAlerta.onended = () => alert('Tempo finalizado!');
-}
-
 function contagemRegressiva() {
     if (tempoDecorridoEmSegundos <= 0) {
+        audioTempoFinalizado.play()   // áudio executado quando cronômetro finalizar
         zerar();
-        tocaSomPausa(()=>exibeAlerta);
-
+        alert('Tempo finalizado!')
+        zerar()
+        return
 
     }
     tempoDecorridoEmSegundos -= 1
@@ -93,15 +86,11 @@ startPauseBt.addEventListener('click', iniciarPausar);
 
 function iniciarPausar() {
     if (intervaloId) {
-        somDeAlerta.src = './sons/pause.mp3';
-        somDeAlerta.loop = false;
-        somDeAlerta.play();
+        audioPausa.play()   // áudio executado quando cronômetro for pausado
         zerar();
         return;
     }
-    somDeAlerta.src = './sons/play.wav';
-    somDeAlerta.loop = false;
-    somDeAlerta.play();
+    audioPlay.play()   // áudio executado quando cronômetro iniciar
     intervaloId = setInterval(contagemRegressiva, 1000); // Executa a função contagemRegressiva a cada 1 segundo
 }
 
