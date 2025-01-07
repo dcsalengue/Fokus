@@ -5,12 +5,17 @@ const longoBt = document.querySelector('.app__card-button--longo');
 const banner = document.querySelector('.app__image');
 const titulo = document.querySelector('.app__title');
 const botoes = document.querySelectorAll('.app__card-button');
+const startPauseBt = document.querySelector('#start-pause');
 const musicaFocoInput = document.querySelector('#alternar-musica');
 const musica = new Audio('./sons/luna-rise-part-one.mp3');
-musica.loop = true;
+const somDeAlerta = new Audio();
 
-musicaFocoInput.addEventListener('change', ()=>{
-    if(musica.paused){
+let tempoDecorridoEmSegundos = 5;
+let intervaloId = null;
+
+musica.loop = true;
+musicaFocoInput.addEventListener('change', () => {
+    if (musica.paused) {
         musica.play();
     } else {
         musica.pause();
@@ -33,7 +38,7 @@ longoBt.addEventListener('click', () => {
 })
 
 function alterarContexto(contexto) {
-    botoes.forEach( contexto => {
+    botoes.forEach(contexto => {
         contexto.classList.remove('active');
 
     });
@@ -59,5 +64,46 @@ function alterarContexto(contexto) {
         default:
             break;
     }
-    titulo.innerText
+    titulo.innerText;
+}
+
+function tocaSomPausa()
+{
+    somDeAlerta.src = './sons/beep.mp3';
+    somDeAlerta.loop = false;
+    somDeAlerta.play();
+
+    somDeAlerta.onended = () => alert('Tempo finalizado!');
+}
+
+function contagemRegressiva() {
+    if (tempoDecorridoEmSegundos <= 0) {
+        zerar();
+        tocaSomPausa(()=>exibeAlerta);
+
+
+    }
+    tempoDecorridoEmSegundos -= 1
+    console.log('Temporizador: ' + tempoDecorridoEmSegundos)
+}
+
+startPauseBt.addEventListener('click', iniciarPausar);
+
+function iniciarPausar() {
+    if (intervaloId) {
+        somDeAlerta.src = './sons/pause.mp3';
+        somDeAlerta.loop = false;
+        somDeAlerta.play();
+        zerar();
+        return;
+    }
+    somDeAlerta.src = './sons/play.wav';
+    somDeAlerta.loop = false;
+    somDeAlerta.play();
+    intervaloId = setInterval(contagemRegressiva, 1000); // Executa a função contagemRegressiva a cada 1 segundo
+}
+
+function zerar() {
+    clearInterval(intervaloId);
+    intervaloId = null;
 }
